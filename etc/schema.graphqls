@@ -1,0 +1,10 @@
+type Customer @doc(description: "Defines the customer name, addresses, and other details.") {
+  hobby: String @doc(description: "Customer Custom Hobby Attribute")
+    @resolver(
+      class: "\\Tereshkov\\Demo\\Model\\Customer\\Hobby\\Resolver\\Output"
+    )
+}
+
+input CustomerInput @doc(description: "An input object that assigns or updates customer attributes.") {
+  hobby: String @doc(description: "Customer Custom Hobby Attribute")
+}
