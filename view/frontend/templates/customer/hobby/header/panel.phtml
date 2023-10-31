@@ -1,0 +1,25 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $escaper \Magento\Framework\Escaper */
+?>
+
+<div class="tereshkov-demo__my-hobby-header"
+     data-bind="scope: 'customer'">
+    <!-- ko if: customer().hobby  -->
+    <span data-bind="text: new String('<?= $escaper->escapeHtml(__('Hobby: %1', '%1')) ?>').replace('%1', customer().hobby)">
+    </span>
+    <!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "customer": {
+                        "component": "Magento_Customer/js/view/customer"
+                    }
+                }
+            }
+        }
+    }
+</script>
