@@ -17,11 +17,16 @@ class Hobby extends AbstractSource
      */
     private $options;
 
+    /**
+     * @var array
+     */
+    private $simpleOptions;
+
     public function getAllOptions(): array
     {
         if (null === $this->options) {
             $this->options = [
-                ['value' => 0, 'label' => __(__('Please Select'))],
+                ['value' => '', 'label' => __(__('Please Select'))],
                 ['value' => self::YOGA, 'label' => __('Yoga')],
                 ['value' => self::TRAVELING, 'label' => __('Traveling')],
                 ['value' => self::HIKING, 'label' => __('Hiking')]
@@ -33,12 +38,34 @@ class Hobby extends AbstractSource
 
     public function getSimpleOptionsArray(): array
     {
-        $simpleOptions = [];
-        foreach ($this->getAllOptions() as $option) {
-            $simpleOptions[$option['value']] = $option['label'];
+        if (null === $this->simpleOptions) {
+            foreach ($this->getAllOptions() as $option) {
+                $this->simpleOptions[$option['value']] = $option['label'];
+            }
         }
 
-        return $simpleOptions;
+        return $this->simpleOptions;
+    }
+
+    public function getLabelByValue(string $value): string
+    {
+        $simpleOptions = $this->getSimpleOptionsArray();
+
+        return isset($simpleOptions[$value]) && !empty($value) ? (string)$simpleOptions[$value] : '';
+    }
+
+    public function getValueByLabel(string $label): string
+    {
+        $value = '';
+        $simpleOptions = $this->getSimpleOptionsArray();
+        foreach ($simpleOptions as $optValue => $optLabel) {
+            if ($label == $optLabel) {
+                $value = $optValue;
+                break;
+            }
+        }
+
+        return $value;
     }
 
     public function addValueSortToCollection($collection, $dir = DataCollection::SORT_ORDER_DESC): self

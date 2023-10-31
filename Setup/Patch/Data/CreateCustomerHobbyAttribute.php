@@ -72,7 +72,7 @@ class CreateCustomerHobbyAttribute implements DataPatchInterface, PatchRevertabl
                 CustomerInterface::HOBBY => [
                     'attribute_set_id' => $attributeSetId,
                     'attribute_group_id' => $attributeGroupId,
-                    'used_in_forms' => ['adminhtml_customer'],
+                    'used_in_forms' => ['adminhtml_customer', 'customer_account_hobby_edit'],
                 ]
             ]
         ];
