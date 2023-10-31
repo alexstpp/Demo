@@ -1,0 +1,79 @@
+<?php
+declare(strict_types=1);
+
+namespace Tereshkov\Demo\Model\Source\Customer;
+
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Data\Collection as DataCollection;
+
+class Hobby extends AbstractSource
+{
+    public const YOGA = 'yoga';
+    public const TRAVELING = 'traveling';
+    public const HIKING = 'hiking';
+
+    /**
+     * @var array
+     */
+    private $options;
+
+    public function getAllOptions(): array
+    {
+        if (null === $this->options) {
+            $this->options = [
+                ['value' => 0, 'label' => __(__('Please Select'))],
+                ['value' => self::YOGA, 'label' => __('Yoga')],
+                ['value' => self::TRAVELING, 'label' => __('Traveling')],
+                ['value' => self::HIKING, 'label' => __('Hiking')]
+            ];
+        }
+
+        return $this->options;
+    }
+
+    public function getSimpleOptionsArray(): array
+    {
+        $simpleOptions = [];
+        foreach ($this->getAllOptions() as $option) {
+            $simpleOptions[$option['value']] = $option['label'];
+        }
+
+        return $simpleOptions;
+    }
+
+    public function addValueSortToCollection($collection, $dir = DataCollection::SORT_ORDER_DESC): self
+    {
+        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $attributeId = $this->getAttribute()->getId();
+        $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        $linkField = $this->getAttribute()->getEntity()->getLinkField();
+
+        $defaultValueTable = $attributeCode . '_default';
+        $storeValueTable = $attributeCode . '_store';
+        $collection->getSelect()
+            ->joinLeft(
+                [$defaultValueTable => $attributeTable],
+                'e.' . $linkField . '=' . $defaultValueTable . '.' . $linkField .
+                ' AND ' . $defaultValueTable . '.attribute_id=\'' . $attributeId . '\''.
+                ' AND ' . $defaultValueTable . '.store_id=\'0\'',
+                []
+            )
+            ->joinLeft(
+                [$storeValueTable => $attributeTable],
+                'e.' . $linkField . '=' . $storeValueTable . '.' . $linkField .
+                ' AND ' . $storeValueTable . '.attribute_id=\'' . $attributeId . '\'' .
+                ' AND ' . $storeValueTable . '.store_id=\'' . $collection->getStoreId() . '\'',
+                []
+            );
+        $valueExpr = $collection->getConnection()
+            ->getCheckSql(
+                $storeValueTable . '.value_id > 0',
+                $storeValueTable . '.value',
+                $defaultValueTable . '.value'
+            );
+
+        $collection->getSelect()->order($valueExpr . ' ' . $dir);
+
+        return $this;
+    }
+}
