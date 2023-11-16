@@ -1,0 +1,38 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $hobbyViewModel \Tereshkov\Demo\ViewModel\Customer\Hobby\Hobby */
+$hobbyViewModel = $block->getHobbyViewModel();
+?>
+
+<form action="<?= $escaper->escapeUrl($hobbyViewModel->getSaveHobbyUrl()) ?>"
+      method="post"
+      data-mage-init='{"validation":{}}'
+      class="form form-hobby">
+    <fieldset class="fieldset">
+        <?= $block->getBlockHtml('formkey') ?>
+        <div class="field">
+            <label class="label" for="hobby">
+                <span><?= $escaper->escapeHtml(__('Please Choose Your Hobby:')) ?></span>
+            </label>
+            <div class="control">
+                <select name="hobby[value]">
+                    <?php foreach ($hobbyViewModel->getSource() as $value => $label): ?>
+                        <option value="<?= $escaper->escapeHtml($value) ?>" <?= $value == $hobbyViewModel->getOptionValue() ? 'selected' : '' ?>>
+                            <?= $escaper->escapeHtml($label) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit"
+                    class="action primary"
+                    title="<?= $escaper->escapeHtml(__('Submit')) ?>">
+                <span><?= $escaper->escapeHtml(__('Submit')) ?></span>
+            </button>
+        </div>
+    </div>
+</form>

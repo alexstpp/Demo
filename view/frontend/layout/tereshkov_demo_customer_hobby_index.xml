@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <action method="setActive">
+                <argument name="path" xsi:type="string">tereshkov_demo/customer/hobby_index</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   template="Tereshkov_Demo::customer/hobby/form.phtml"
+                   name="customer.account.tereshkov.demo.hobby.form">
+                <arguments>
+                    <argument name="hobby_view_model" xsi:type="object">Tereshkov\Demo\ViewModel\Customer\Hobby\Form</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

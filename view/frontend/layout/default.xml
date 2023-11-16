@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="header.panel">
+            <block class="Magento\Framework\View\Element\Template"
+                   template="Tereshkov_Demo::customer/hobby/header/panel.phtml"
+                   name="top.links.tereshkov.demo.hobby.panel"
+                   before="store_language">
+            </block>
+        </referenceContainer>
+    </body>
+</page>
